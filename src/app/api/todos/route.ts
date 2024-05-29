@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import * as yup from "yup";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -17,4 +18,36 @@ export async function GET(request: Request) {
   });
 
   return Response.json({ method: "GET", message: "all todos", todos: todos });
+}
+
+const postSchema = yup.object({
+  description: yup.string().required(),
+  complete: yup.boolean().optional().default(false), //! TODO mostrar algo interesante
+});
+
+export async function POST(request: Request) {
+  try {
+    /*
+    Esta es una alternativa para cuando Prisma
+    no validaba campos que no estuviesen declarados
+    en el model.schema, pero ya no es necesario
+    */
+    // const {complete, description} = await postSchema.validate(await request.json());
+
+    // const todo = await prisma.todo.create({
+    //   data: {complete, description},
+    // });
+
+    const body = await postSchema.validate(await request.json());
+    const todo = await prisma.todo.create({
+      data: body,
+    });
+    return Response.json({
+      method: "POST",
+      message: "create todo",
+      todo: todo,
+    });
+  } catch (error: any) {
+    return Response.json({ message: error.message }, { status: 400 });
+  }
 }
