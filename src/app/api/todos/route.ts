@@ -51,3 +51,22 @@ export async function POST(request: Request) {
     return Response.json({ message: error.message }, { status: 400 });
   }
 }
+const deleteSchema = yup.object({
+  id: yup.string().required(),
+})
+export async function DELETE(request: Request) {
+  try {
+    const todo = await prisma.todo.deleteMany({
+      where: {
+        complete: true,
+      },
+    })
+    return Response.json({
+      method: "DELETE",
+      message: "delete todo",
+      todo: todo,
+    });
+  } catch (error: any) {
+    return Response.json({ message: error.message }, { status: 400 });
+  }
+}
