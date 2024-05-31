@@ -1,29 +1,29 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { IoTrashOutline } from "react-icons/io5";
-import * as apiTodos from "@/todos/helpers/todos";
+import { addTodo, deleteCompletedTodos } from "../actions/todo-actions";
+// import * as apiTodos from "@/todos/helpers/todos";
 
 export const NewTodo = () => {
   const [description, setDescription] = useState("");
-  const router = useRouter();
+  // const router = useRouter();
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (description.trim().length === 0) {
       return;
     }
-    const createdTodo = await apiTodos.createTodo(description);
+    const createdTodo = await addTodo(description);
 
     setDescription("");
-
-    router.refresh();
   };
 
   const deleteCompleted = async () => {
-    const deletedTodos = await apiTodos.deleteCompletedTodos();
-    router.refresh();
+    // const deletedTodos = await apiTodos.deleteCompletedTodos();
+    // router.refresh();
+    await deleteCompletedTodos();
   };
 
   return (
@@ -52,7 +52,7 @@ export const NewTodo = () => {
       >
         <IoTrashOutline />
         <span className="ml-2"></span>
-        Borrar completadols
+        Borrar completados
       </button>
     </form>
   );
