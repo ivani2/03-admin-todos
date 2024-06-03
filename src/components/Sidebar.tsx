@@ -1,31 +1,51 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CiBookmarkCheck, CiLogout } from "react-icons/ci";
+import { CiLogout } from "react-icons/ci";
 import { SidebarItem } from "./SidebarItem";
-import { IoCalendarOutline, IoCheckboxOutline, IoListOutline } from "react-icons/io5";
-
+import {
+  IoBasketOutline,
+  IoCalendarOutline,
+  IoCheckboxOutline,
+  IoCodeWorkingOutline,
+  IoListOutline,
+} from "react-icons/io5";
 
 const menuItems = [
   {
-    icon: <IoCalendarOutline size={30}/>,
+    icon: <IoCalendarOutline size={30} />,
     title: "Dashboard",
     path: "/dashboard",
-    className: "relative px-4 py-3 flex items-center space-x-4 rounded-xl"
+    className: "relative px-4 py-3 flex items-center space-x-4 rounded-xl",
   },
   {
-    icon: <IoCheckboxOutline size={30}/>,
+    icon: <IoCheckboxOutline size={30} />,
     title: "Rest TODOS",
     path: "/dashboard/rest-todos",
-    className: "px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group"
+    className:
+      "px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group",
   },
   {
-    icon: <IoListOutline size={30}/>,
+    icon: <IoListOutline size={30} />,
     title: "Server actions",
     path: "/dashboard/server-todos",
-    className: "px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group"
-  }
-
-]
+    className:
+      "px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group",
+  },
+  {
+    icon: <IoCodeWorkingOutline size={30} />,
+    title: "Cookies",
+    path: "/dashboard/cookies",
+    className:
+      "px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group",
+  },
+  {
+    icon: <IoBasketOutline size={30} />,
+    title: "Products",
+    path: "/dashboard/products",
+    className:
+      "px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group",
+  },
+];
 
 export const Sidebar = () => {
   return (
@@ -59,12 +79,9 @@ export const Sidebar = () => {
           </div>
 
           <ul className="space-y-2 tracking-wide mt-8">
-            {menuItems.map(menuItem =>
-              <SidebarItem
-              key={menuItem.title}
-              {...menuItem}
-              />
-            )}
+            {menuItems.map((menuItem) => (
+              <SidebarItem key={menuItem.title} {...menuItem} />
+            ))}
           </ul>
         </div>
 

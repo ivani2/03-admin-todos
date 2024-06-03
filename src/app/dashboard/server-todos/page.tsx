@@ -13,7 +13,6 @@ export const metadata = {
 export default async function ServerTodosPage() {
   const todos = await prisma.todo.findMany({ orderBy: { description: "asc" } });
 
-  console.log("construido");
   return (
     <>
       <span className="text-3xl  mb-10">Server actions</span>
