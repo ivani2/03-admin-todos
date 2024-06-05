@@ -6,6 +6,9 @@ import {
   CiSearch,
   CiShoppingBasket,
 } from "react-icons/ci";
+import { LoginButton } from "./sidebar/LoginButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 const getTotalCartCount = (cart: { [id: string]: number }): number => {
   let items = 0;
@@ -15,8 +18,10 @@ const getTotalCartCount = (cart: { [id: string]: number }): number => {
   return items;
 };
 
-export const TopMenu = () => {
+export const TopMenu = async () => {
   const cookieStore = cookies();
+
+  const session = await getServerSession(authOptions);
 
   const cart = JSON.parse(cookieStore.get("cart")?.value ?? "{}");
 
@@ -26,6 +31,12 @@ export const TopMenu = () => {
     <>
       <div className="sticky z-10 top-0 h-16 border-b bg-white lg:py-2.5">
         <div className="px-6 flex items-center justify-between space-x-4">
+        {
+          !session && (
+            <LoginButton />
+          )
+        }
+
           <h5 hidden className="text-2xl text-gray-600 font-medium lg:block">
             Dashboard
           </h5>

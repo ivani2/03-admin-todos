@@ -1,3 +1,4 @@
+import { getUserSessionServer } from "@/auth/actions/auth-actions";
 import prisma from "@/lib/prisma";
 import * as yup from "yup";
 
@@ -38,9 +39,17 @@ export async function POST(request: Request) {
     //   data: {complete, description},
     // });
 
-    const body = await postSchema.validate(await request.json());
+    const user = await getUserSessionServer();
+
+    if (!user) {
+      return Response.json({ message: "Not authorized" }, { status: 401 });
+    }
+
+    const { complete, description } = await postSchema.validate(
+      await request.json()
+    );
     const todo = await prisma.todo.create({
-      data: body,
+      data: { complete, description, userId: user.id },
     });
     return Response.json({
       method: "POST",
@@ -53,14 +62,21 @@ export async function POST(request: Request) {
 }
 const deleteSchema = yup.object({
   id: yup.string().required(),
-})
+});
 export async function DELETE(request: Request) {
+  const user = await getUserSessionServer();
+
+    if (!user) {
+      return Response.json({ message: "Not authorized" }, { status: 401 });
+    }
+
   try {
     const todo = await prisma.todo.deleteMany({
       where: {
         complete: true,
+        userId: user.id,
       },
-    })
+    });
     return Response.json({
       method: "DELETE",
       message: "delete todo",

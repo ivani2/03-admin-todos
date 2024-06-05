@@ -1,24 +1,27 @@
 import prisma from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
 export async function GET(request: Request) {
   const deleteTodo = await prisma.todo.deleteMany();
+  const deleteUsers = await prisma.user.deleteMany();
 
-  //   const todo = await prisma.todo.create({
-  //     data: { description: "Obtener gema de poder", complete: true },
-  //   });
-
-  const todo = await prisma.todo.createMany({
-    data: [
-      { description: "Obtener gema de poder", complete: true },
-      { description: "obtener gema de tiempo" },
-      { description: "obtener gema de espacio" },
-      { description: "obtener gema de realidad" },
-      { description: "obtener gema de mente" },
-      { description: "obtener gema de alma" },
-    ],
+  const user = await prisma.user.create({
+    data: {
+      email: "test1@google.com",
+      password: bcrypt.hashSync("nuevo"),
+      roles: ["admin", "client", "super-user"],
+      todos: {
+        create: [
+          { description: "Obtener gema de poder", complete: true },
+          { description: "Obtener gema de tiempo" },
+          { description: "Obtener gema de espacio" },
+          { description: "Obtener gema de realidad" },
+          { description: "Obtener gema de mente" },
+          { description: "Obtener gema de alma" },
+        ],
+      },
+    },
   });
-
-  console.log(todo);
 
   return Response.json({ message: "Seed executed" });
 }

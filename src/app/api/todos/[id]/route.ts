@@ -1,3 +1,4 @@
+import { getUserSessionServer } from "@/auth/actions/auth-actions";
 import prisma from "@/lib/prisma";
 import { Todo } from "@prisma/client";
 import * as yup from "yup";
@@ -11,8 +12,16 @@ interface Params {
 }
 
 const getTodo = async (id: string): Promise<Todo | null> => {
+  const user = await getUserSessionServer();
+
+  if (!user) {
+    return null;
+  }
   const result = await prisma.todo.findUnique({ where: { id } });
-  return result;
+  if (result?.userId === user.id) {
+    return result;
+  }
+  return null;
 };
 
 export async function GET(request: Request, ...rest: REST[]) {
